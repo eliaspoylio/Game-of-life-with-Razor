@@ -3,12 +3,45 @@
 @{
     ViewData["Title"] = "Home page";
 }
+@using System.Text;
+
+@functions {
+
+    String Update(int[,] grid, int gridXSize, int gridYSize)
+    {
+        //counting living neighbour cells
+        int[,] nextGrid = new int[gridYSize, gridXSize];
+        StringBuilder info = new StringBuilder();
+        for (int y = 1; y < gridYSize - 1; y++)
+        {
+            for (int x = 1; x < gridXSize - 1; x++)
+            {
+                int neighbourCount = 0;
+                neighbourCount = grid[y - 1, x - 1] + grid[y - 1, x] + grid[y - 1, x + 1] +
+                                 grid[y, x - 1] + grid[y, x + 1] +
+                                 grid[y + 1, x - 1] + grid[y + 1, x] + grid[y + 1, x + 1];
+                info.AppendLine(@y.ToString());
+                info.AppendLine(", ".ToString());
+                info.AppendLine(@x.ToString());
+                info.AppendLine(" has ".ToString());
+                info.AppendLine(@neighbourCount.ToString());
+                info.AppendLine(". ".ToString());
+                //<span>@y, @x has @neighbourCount living neighours</span>
+                //<br />
+            }
+        }
+        String info1 = info.ToString();
+        return info1;
+    }
+
+}
 
 
 <div class="text-center">
     <div class="text-center">
         <h1 class="display-4">Welcome @Model.Name</h1>
     </div>
+    <!--
     <form method="post" asp-page="Index">
         <div class="form-group">
             <label asp-for="Name"></label>
@@ -16,12 +49,10 @@
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
+     -->
 </div>
 <div class="text">
     <tt>
-
-
-
 
         @{
             Random rand = new Random();
@@ -54,71 +85,26 @@
                 <br />
             }
 
+            //Update(grid, gridXSize, gridYSize);
+            //<button onclick="@Update(grid, gridXSize, gridYSize)">Start Timer</button>
 
-            //counting living neighbour cells
-            int[,] nextGrid = new int[gridYSize, gridXSize];
-            for (int y = 1; y < gridYSize - 1; y++)
-            {
-                for (int x = 1; x < gridXSize - 1; x++)
-                {
-                    int neighbourCount = 0;
-                    neighbourCount = grid[y - 1, x - 1] + grid[y - 1, x] + grid[y - 1, x + 1] +
-                                     grid[y, x - 1] + grid[y, x + 1] +
-                                     grid[y + 1, x - 1] + grid[y + 1, x] + grid[y + 1, x + 1];
-                    <span>@y, @x has @neighbourCount living neighours</span>
-                    <br />
+            <button onclick="myFunction()">Click me</button>
+
+            <p id="demo"></p>
+
+            <script>
+                function myFunction() {
+                    var jsgrid = '@grid';
+                    var jsgridXSize = '@gridXSize';
+                    var jsgridYSize = '@gridYSize';
+                    var customerName = '@Update(@grid, @gridXSize, @gridYSize);'
+                    var info = @Update(@grid, @gridXSize, @gridYSize);
+                    document.getElementById("demo").innerHTML = customerName;
                 }
-            }
+            </script>
 
 
-            //game of life
-            /*
-            int[,] nextGrid = new int[gridYSize, gridXSize];
-            for (int y = 0; y < gridYSize; y++)
-            {
-                for (int x = 0; x < gridXSize; x++)
-                {
-                    int neighbourCount = 0;
-                    for (int dy = -1; dy <= y + 1; dy++)
-                    {
-                        for (int dx = -1; dx <= x + 1; dx++)
-                        {
-                            if (dy >= 0 && dx >= 0 && dy < gridYSize && dx < gridXSize)
-                            {
-                                //do something for every cell
-                            }
-                        }
-                    }
-                    <span>@y, @x has @neighbourCount neighors</span>
-                }
-            }*/
 
-
-        }
-
-        <br /><br /><br /><br />
-        <br /><br /><br /><br />
-        <br /><br /><br /><br />
-        <br /><br /><br /><br />
-        <br /><br /><br /><br />
-        <br /><br /><br /><br />
-        @{
-            <h3>Random level</h3>
-            int[,] level2 = new int[6, 10] {
-                    { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-                    { 1, rand.Next(0,2), rand.Next(0,2), rand.Next(0,2), rand.Next(0,2), rand.Next(0,2), rand.Next(0,2), rand.Next(0,2), rand.Next(0,2), 1},
-                    { 1, rand.Next(0,2), rand.Next(0,2), rand.Next(0,2), rand.Next(0,2), rand.Next(0,2), rand.Next(0,2), rand.Next(0,2), rand.Next(0,2), 1},
-                    { 1, rand.Next(0,2), rand.Next(0,2), rand.Next(0,2), rand.Next(0,2), rand.Next(0,2), rand.Next(0,2), rand.Next(0,2), rand.Next(0,2), 1},
-                    { 1, rand.Next(0,2), rand.Next(0,2), rand.Next(0,2), rand.Next(0,2), rand.Next(0,2), rand.Next(0,2), rand.Next(0,2), rand.Next(0,2), 1},
-                    { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }};
-            for (int i = 0; i < 6; i++)
-            {
-                for (int j = 0; j < 10; j++)
-                {
-                    <span>@dict[level2[i, j]]</span>
-                }
-                <br />
-            }
         }
 
 
